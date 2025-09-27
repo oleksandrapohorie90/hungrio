@@ -1,6 +1,5 @@
 package com.growthhungry.hungrio.model;
 
-
 import jakarta.persistence.*;
 
 /**
