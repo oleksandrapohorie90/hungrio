@@ -1,11 +1,14 @@
 package com.growthhungry.hungrio.model;
 
+
 import jakarta.persistence.*;
 
 /**
  * Why everything is coming from jakarta?
  * What is JPA in simple words
+ * What is bean? - read
  */
+
 //JPA = Java Persistence API.
 //It’s just a specification (a set of rules/interfaces) in Java that tells how to store Java objects in a database and read them back.JPA is like a translator between your Java classes and the database tables.
 //@Entity - marks the class as a JPA entity.
