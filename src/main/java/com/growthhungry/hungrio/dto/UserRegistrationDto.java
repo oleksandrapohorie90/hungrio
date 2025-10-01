@@ -1,9 +1,13 @@
-package com.growthhungry.hungrio.service.dto;
+package com.growthhungry.hungrio.dto;
 
 public class UserRegistrationDto {
+    public String username;
+    public String password;
 
-    private String username;
-    private String password;
+    public UserRegistrationDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;
@@ -21,4 +25,3 @@ public class UserRegistrationDto {
         this.password = password;
     }
 }
-
