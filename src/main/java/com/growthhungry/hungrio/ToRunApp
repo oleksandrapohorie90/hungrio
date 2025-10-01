@@ -1,0 +1,14 @@
+cd Downloads/hungrio
+ls
+./mvnw spring-boot:run
+
+
+#To create a new user
+curl -i -X POST 'http://127.0.0.1:8080/api/auth/register' \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"alex4","password":"12345"}'
+
+#To login as a created user
+curl -i -X POST 'http://127.0.0.1:8080/api/auth/login' \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"alex3","password":"1234"}'
