@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     //Login endpoint
-    @PostMapping("/login")
+    @GetMapping ("/login")
     public ResponseEntity<String> login(@RequestBody UserLoginDto loginDto) {
         User user = userService.findByUsername(loginDto.getUsername());
         if (user == null) {
