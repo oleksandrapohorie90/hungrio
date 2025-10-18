@@ -44,7 +44,7 @@ public class AuthControllerTest {
 
     @BeforeEach
     void setup() {
-        mockMvc - MockMvcBuilders.standaloneSetup(authController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
         objectMapper = new ObjectMapper();
     }
 
@@ -72,18 +72,6 @@ public class AuthControllerTest {
                 .andExpect(content().string("Username already exists"));
     }
 
-    @Test
-    void register_invalidInput_returns400_withMessage() throws Exception {
-        when(userService.registerUser(any(UserRegistrationDto.class)))
-                .thenThrow(new IllegalArgumentException("Username already exists"));
-
-        mockMvc.perform(post("/api/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {"username":"alex","password":"123"}"""))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Username already exists"));
-    }
 
     //login tests
     @Test
@@ -95,7 +83,7 @@ public class AuthControllerTest {
 
         when(userService.findByUsername("testUser")).thenReturn(user);
         when(passwordEncoder.matches("password123", "encodedPassword")).thenReturn(true);
-        mockMvc.perform(get("/api/auth/login")
+        mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
@@ -104,15 +92,15 @@ public class AuthControllerTest {
 
     @Test
     void login_incorrectPassword() throws Exception {
-       UserRegistrationDto dto = new UserRegistrationDto("testUser", "wrongPass");
-       User user = new User();
+        UserRegistrationDto dto = new UserRegistrationDto("testUser", "wrongPass");
+        User user = new User();
         user.setUsername("testUser");
         user.setPasswordHash("encodedPassword");
 
         when(userService.findByUsername("testUser")).thenReturn(user);
         when(passwordEncoder.matches("wrongPass", "encodedPassword")).thenReturn(false);
 
-        mockMvc.perform(get("/api/auth/login")
+        mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isUnauthorized())
@@ -130,4 +118,27 @@ public class AuthControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("Invalid username or password"));
     }
+
+    @Test
+    void register_emptyUsername_returns400() throws Exception {
+        String body = """
+                {"username":"","password":"password123"}
+                """;
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void register_emptyPassword_returns400() throws Exception {
+        String body = """
+                {"username":"alex","password":""}
+                """;
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest());
+    }
+
 }
