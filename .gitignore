@@ -29,6 +29,14 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# frontend
+/frontend/node_modules
+/frontend/dist
+/frontend/.DS_Store
+
+# macOS
+.DS_Store
+
 ### VS Code ###
 .vscode/
 .txt
