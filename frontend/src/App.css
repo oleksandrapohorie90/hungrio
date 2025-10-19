@@ -24,6 +24,13 @@
   margin-top: 16px;
 }
 
+/* .navbar { display:flex; justify-content:space-between; padding:12px 16px; }
+.nav-links { display:flex; gap:12px; align-items:center; }
+.welcome-text { margin-right:8px; }
+.home-page { text-align:center; }
+.cta-buttons { display:flex; gap:12px; justify-content:center; margin-top:16px; } */
+
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
