@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.http.MediaType;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -72,10 +71,9 @@ public class AuthControllerTest {
                 .andExpect(content().string("Username already exists"));
     }
 
-
     //login tests
     @Test
-    void login_success() throws Exception {
+    void login_Successful() throws Exception {
         UserRegistrationDto dto = new UserRegistrationDto("testUser", "password123");
         User user = new User();
         user.setUsername("testUser");
@@ -91,7 +89,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    void login_incorrectPassword() throws Exception {
+    void login_IncorrectPassword() throws Exception {
         UserRegistrationDto dto = new UserRegistrationDto("testUser", "wrongPass");
         User user = new User();
         user.setUsername("testUser");
@@ -108,7 +106,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    void login_userNotFound_returns401() throws Exception {
+    void login_UserNotFound_Returns401() throws Exception {
         when(userService.findByUsername("ghost")).thenReturn(null);
 
         mockMvc.perform(post("/api/auth/login")
@@ -120,7 +118,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    void register_emptyUsername_returns400() throws Exception {
+    void register_EmptyUsername_Returns400() throws Exception {
         String body = """
                 {"username":"","password":"password123"}
                 """;
@@ -131,7 +129,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    void register_emptyPassword_returns400() throws Exception {
+    void register_EmptyPassword_returns400() throws Exception {
         String body = """
                 {"username":"alex","password":""}
                 """;
@@ -139,6 +137,28 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void register_ShortUsername() throws Exception {
+        UserRegistrationDto dto = new UserRegistrationDto("ab", "password123");
+        
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("username: Username must be between 3 and 50 characters"));
+    }
+
+    @Test
+    void register_ShortPassword() throws Exception {
+        UserRegistrationDto dto = new UserRegistrationDto("testuser", "12345");
+        
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("password: Password must be at least 6 characters long"));
     }
 
 }

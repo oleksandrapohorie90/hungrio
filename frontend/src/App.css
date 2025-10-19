@@ -17,6 +17,12 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px; /* space between buttons */
+  margin-top: 16px;
+}
 
 @keyframes logo-spin {
   from {

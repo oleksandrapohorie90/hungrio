@@ -33,10 +33,14 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     try {
       await axios.post('/api/auth/login', formData);
-      navigate('/');
+    
+      //Save username so NavBar/HomePage can greet the user
+      localStorage.setItem('username', formData.username);
+    
+      //Optionally send a success message back to homepage
+      navigate('/', { state: { message: `Welcome, ${formData.username}!` } });
     } catch (error: any) {
       setError(error.response?.data || 'An error occurred during login');
     }
