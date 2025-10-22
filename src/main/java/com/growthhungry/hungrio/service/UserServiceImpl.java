@@ -16,6 +16,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    
 
     @Override
     public User registerUser(UserRegistrationDto userData) throws IllegalArgumentException{
