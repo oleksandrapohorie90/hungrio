@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: alexasky111
     password: growthhungry25
@@ -12,3 +12,16 @@ spring:
       settings:
         web-allow-others: false
         trace: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+app:
+  cors: # CORS = Cross-Origin Resource Sharing
+    allowed-origins:
+      - "http://localhost:5173"       # your Vite frontend
+    allowed-methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+    allowed-headers: "Authorization,Content-Type,X-Requested-With"
+    exposed-headers: "Location,Set-Cookie"
+    allow-credentials: true
