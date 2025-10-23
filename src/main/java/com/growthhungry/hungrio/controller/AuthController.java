@@ -1,11 +1,13 @@
 package com.growthhungry.hungrio.controller;
 
+import com.growthhungry.hungrio.config.JwtTokenProvider;
 import com.growthhungry.hungrio.dto.UserLoginDto;
 import com.growthhungry.hungrio.dto.UserRegistrationDto;
 import com.growthhungry.hungrio.model.User;
 import com.growthhungry.hungrio.service.UserService;
 import jakarta.validation.Valid;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,12 @@ public class AuthController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder) {
+    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     // -------------------------
@@ -51,17 +55,32 @@ public class AuthController {
     // Login endpoint
     // -------------------------
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDto loginDto) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDto loginDto) {
         User user = userService.findByUsername(loginDto.getUsername());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-
         boolean passwordMatches = passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash());
         if (!passwordMatches) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-
-        return ResponseEntity.ok("Login successful");
+    
+        String token = jwtTokenProvider.generateToken(user.getUsername());
+        return ResponseEntity.ok(Map.of("token", token));
     }
+
+    // @PostMapping("/login")
+    // public ResponseEntity<String> login(@Valid @RequestBody UserLoginDto loginDto) {
+    //     User user = userService.findByUsername(loginDto.getUsername());
+    //     if (user == null) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+    //     }
+
+    //     boolean passwordMatches = passwordEncoder.matches(loginDto.getPassword(), user.getPasswordHash());
+    //     if (!passwordMatches) {
+    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+    //     }
+
+    //     return ResponseEntity.ok("Login successful");
+    // }
 }

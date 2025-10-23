@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +19,18 @@ public class ChatService {
     @Value("${gemini.base-url}")
     private String baseUrl;
 
+    @Value("${gemini.api.version}")
+    private String apiVersion;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String sendMessage(String userMessage) {
         // Build URL: POST .../v1beta/models/{model}:generateContent?key=API_KEY
-        String url = String.format("%s/v1beta/models/%s:generateContent?key=%s",
-                baseUrl, model, apiKey);
+String url = String.format(
+  "%s/%s/models/%s:generateContent?key=%s",
+  baseUrl, apiVersion, model, apiKey
+);
+
 
         // Minimal request body for Gemini:
         Map<String, Object> requestBody = Map.of(
