@@ -1,24 +1,20 @@
 package com.growthhungry.hungrio.controller;
 
-import com.growthhungry.hungrio.dto.ChatRequest;
-import com.growthhungry.hungrio.dto.ChatResponse;
+import com.growthhungry.hungrio.dto.ChatRequestDto;
+import com.growthhungry.hungrio.dto.ChatResponseDto;
 import com.growthhungry.hungrio.service.ChatService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/chat")
+@RequestMapping("/api")
 public class ChatController {
     private final ChatService chatService;
+    public ChatController(ChatService chatService) { this.chatService = chatService; }
 
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
-    }
-
-    @PostMapping
-    public ResponseEntity<ChatResponse> chat(@Valid @RequestBody ChatRequest req) {
-        String reply = chatService.sendMessage(req.message());
-        return ResponseEntity.ok(new ChatResponse(reply, Instant.now()));
+    @PostMapping("/chat")
+    public ResponseEntity<ChatResponseDto> chat(@Valid @RequestBody ChatRequestDto req) {
+        return ResponseEntity.ok(chatService.processMessage(req));
     }
 }

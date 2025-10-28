@@ -4,8 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# Local secrets (never commit)
-src/main/resources/application.properties
+# secrets
+.env
+.env.*
+application-local.properties
 
 ### STS ###
 .apt_generated
