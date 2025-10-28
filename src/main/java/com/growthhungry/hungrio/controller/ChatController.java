@@ -7,12 +7,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
-
     private final ChatService chatService;
 
     public ChatController(ChatService chatService) {
