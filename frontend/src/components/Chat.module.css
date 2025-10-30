@@ -1,0 +1,62 @@
+.chat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .history {
+    height: 420px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px;
+    background: #fafafa;
+    border-radius: 6px;
+    border: 1px solid #eee;
+  }
+  
+  .user { text-align: right; }
+  .ai   { text-align: left; }
+  
+  .bubble {
+    display: inline-block;
+    max-width: 80%;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: #e8f0ff;
+  }
+  .ai .bubble {
+    background: #f1f1f1;
+  }
+  
+  .time {
+    display: block;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  
+  .inputRow {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .send {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #3b82f6;
+    color: white;
+  }
+  .send:disabled { opacity: 0.6; cursor: default; }
+  

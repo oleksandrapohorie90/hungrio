@@ -1,29 +1,70 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import ChatPage from './pages/ChatPage';
 import NavBar from './components/NavBar';
-import Chat from './pages/Chat';
-import ProtectedRoute from './routes/ProtectedRoute';
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  requireAuth?: boolean;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAuth = true }) => {
+  const isAuthenticated = localStorage.getItem('token') !== null;
+
+  if (requireAuth && !isAuthenticated) {
+    // Send a message so LoginPage can show it
+    return <Navigate to="/login" replace state={{ msg: 'You must be logged in to access the chat.' }} />;
+  }
+
+  if (!requireAuth && isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 function App() {
   return (
-    <div className="App">
-      <NavBar />
-      <main className="container">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
+    <Router>
+      <div className="App">
+        <NavBar />
+        <main className="container">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
 
-          {/* 👇 Week 7: Protected Chat route */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/chat" element={<Chat />} />
-          </Route>
-        </Routes>
-      </main>
-    </div>
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <RegisterPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <LoginPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <ChatPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
