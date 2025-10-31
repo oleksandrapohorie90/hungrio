@@ -1,6 +1,5 @@
 package com.growthhungry.hungrio.service;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,9 +16,13 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
     @Value("${jwt.secret}")
     private String secretKey;
-    
+
+    @Value("${jwt.exp-min:60}") // Default to 60 minutes if not set in .env
+    private long jwtExpirationMinutes;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -34,12 +37,14 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, User user) {
+        long expirationMillis = 1000 * 60 * jwtExpirationMinutes;
+
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

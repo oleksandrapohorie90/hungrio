@@ -13,3 +13,6 @@ curl -i -X POST 'http://127.0.0.1:8080/api/auth/register' \
 curl -i -X POST 'http://127.0.0.1:8080/api/auth/login' \
   -H 'Content-Type: application/json' \
   -d '{"username":"alex3","password":"1234"}'
+
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
