@@ -19,23 +19,16 @@ api:
   gemini:
     api-key: ${GEMINI_API_KEY:dummy-gemini-key}
 
+# JWT Configuration
 jwt:
   secret: ${JWT_SECRET}
+  exp-min: ${JWT_EXP_MIN:60}
 
+# CORS Configuration — must be at the root level (same indent as jwt)
 app:
-  cors: # CORS = Cross-Origin Resource Sharing
-    allowed-origins:
-      - "http://localhost:5173"       # your Vite frontend
+  cors:
+    allowed-origins: "http://localhost:5173,http://localhost:3000"
     allowed-methods: "GET,POST,PUT,PATCH,DELETE,OPTIONS"
     allowed-headers: "Authorization,Content-Type,X-Requested-With"
     exposed-headers: "Location,Set-Cookie"
     allow-credentials: true
-
-# CORS Configuration
-# app:
-#   cors:
-#     allowed-origins: "http://localhost:3000"
-#     allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
-#     allowed-headers: "*"
-
-
