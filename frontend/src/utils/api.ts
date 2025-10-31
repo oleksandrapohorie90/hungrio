@@ -1,13 +1,16 @@
+// src/utils/api.ts
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "/api",           // works with your Vite proxy
+  withCredentials: false,
 });
 
-api.interceptors.request.use((cfg) => {
+// attach Authorization: Bearer <token> to every request
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) cfg.headers.Authorization = `Bearer ${token}`;
-  return cfg;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
 });
 
 export default api;
