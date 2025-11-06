@@ -1,15 +1,16 @@
-// src/utils/api.ts
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "/api",           // works with your Vite proxy
-  withCredentials: false,
-});
+// If proxy is set (vite.config.ts), baseURL can be "/api"
+const baseURL = "/api";
 
-// attach Authorization: Bearer <token> to every request
+const api = axios.create({ baseURL });
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
